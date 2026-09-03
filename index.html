@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSIA Inventário</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><i class="ti ti-video"></i></div>
+      <div>
+        <div class="brand-text">GSIA Inventário</div>
+        <div class="brand-sub">Inventário de equipamentos</div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-group-label">Consultar</div>
+      <div class="nav-item active" data-view="pesquisar"><span class="nav-icon"><i class="ti ti-search"></i></span>Pesquisar clientes</div>
+      <div class="nav-item" data-view="overview"><span class="nav-icon"><i class="ti ti-chart-bar"></i></span>Visão geral</div>
+      <div class="nav-group-label">Cadastro</div>
+      <div class="nav-item" data-view="cadastro"><span class="nav-icon"><i class="ti ti-plus"></i></span>Novo registro</div>
+    </div>
+    <div class="sidebar-stats" id="sidebarStats"></div>
+  </div>
+
+  <div class="main">
+
+    <div class="view active" id="view-pesquisar">
+      <div class="topbar">
+        <div>
+          <p class="page-title">Pesquisar clientes</p>
+          <p class="page-sub">Busque por cliente, cidade, segmento ou ID de equipamento/câmera</p>
+        </div>
+      </div>
+      <div class="searchbar">
+        <input type="text" class="search-input" id="searchInput" placeholder="Buscar por nome, cidade, segmento, ID de cliente, equipamento ou câmera...">
+      </div>
+      <div id="searchResultsInfo" class="quick-search-hint"></div>
+      <div id="clientList"></div>
+      <div id="clientDetail" style="display:none"></div>
+    </div>
+
+    <div class="view" id="view-overview">
+      <div class="topbar">
+        <div>
+          <p class="page-title">Visão geral</p>
+          <p class="page-sub">Panorama do parque instalado</p>
+        </div>
+      </div>
+      <div id="overviewContent"></div>
+    </div>
+
+    <div class="view" id="view-cadastro">
+      <div class="topbar">
+        <div>
+          <p class="page-title">Novo registro</p>
+          <p class="page-sub">Cadastre clientes, locais e equipamentos no inventário</p>
+        </div>
+      </div>
+      <div class="subform-tabs">
+        <div class="subform-tab active" data-sub="equipamento">Equipamento</div>
+        <div class="subform-tab" data-sub="cliente">Cliente</div>
+        <div class="subform-tab" data-sub="local">Local</div>
+      </div>
+
+      <div class="card" id="sub-equipamento">
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-building"></i>Cliente e local</div>
+          <div class="form-grid">
+            <div class="field">
+              <label>Cliente *</label>
+              <select id="eq_cliente"></select>
+            </div>
+            <div class="field">
+              <label>Local *</label>
+              <select id="eq_local"></select>
+            </div>
+          </div>
+          <div class="form-grid" id="eq_novolocal_fields" style="display:none;margin-top:12px;">
+            <div class="field"><label>Nome do novo local *</label><input type="text" id="eq_nl_nome" placeholder="Ex: Torre 2"></div>
+            <div class="field"><label>Cidade/Região</label><input type="text" id="eq_nl_cidade"></div>
+            <div class="field"><label>UF</label><select id="eq_nl_uf"></select></div>
+            <div class="field span2"><label>Endereço / referência</label><input type="text" id="eq_nl_end"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-device-cctv"></i>Dados do equipamento</div>
+          <div class="form-grid">
+            <div class="field"><label>Tipo *</label><select id="eq_tipo"></select></div>
+            <div class="field"><label>Nome no sistema (SIM Next/D-Guard)</label><input type="text" id="eq_nome"></div>
+            <div class="field"><label>Fabricante</label><input type="text" id="eq_fab" value="Intelbras"></div>
+            <div class="field"><label>Modelo</label><input type="text" id="eq_modelo"></div>
+            <div class="field"><label>Cloud ID / Domínio</label><input type="text" id="eq_cloud"></div>
+            <div class="field"><label>Firmware</label><input type="text" id="eq_firmware"></div>
+            <div class="field"><label>Qtde canais</label><input type="number" id="eq_canais" min="0"></div>
+            <div class="field"><label>Status</label><select id="eq_status"></select></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-network"></i>Rede e acesso</div>
+          <div class="form-grid">
+            <div class="field"><label>IPv4 local</label><input type="text" id="eq_ip" placeholder="192.168.0.100"></div>
+            <div class="field"><label>MAC</label><input type="text" id="eq_mac" placeholder="00:00:00:00:00:00"></div>
+            <div class="field"><label>Gateway</label><input type="text" id="eq_gw"></div>
+            <div class="field"><label>Máscara</label><input type="text" id="eq_mask" value="255.255.255.0"></div>
+            <div class="field"><label>DNS primário</label><input type="text" id="eq_dns1"></div>
+            <div class="field"><label>DNS secundário</label><input type="text" id="eq_dns2"></div>
+            <div class="field"><label>Porta HTTP</label><input type="number" id="eq_porthttp" value="80"></div>
+            <div class="field"><label>Porta serviço</label><input type="number" id="eq_portsvc" value="37777"></div>
+            <div class="field"><label>Usuário</label><input type="text" id="eq_user"></div>
+            <div class="field"><label>Senha</label><input type="text" id="eq_pass"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-info-circle"></i>Origem e observações</div>
+          <div class="form-grid">
+            <div class="field"><label>Origem da informação</label><select id="eq_origem"></select></div>
+            <div class="field span2"><label>Observações</label><input type="text" id="eq_obs"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-camera"></i>Câmeras deste equipamento</div>
+          <div class="cam-rows" id="camRows"></div>
+          <div style="margin-top:10px;"><span class="chip-add" id="addCamRow"><i class="ti ti-plus"></i>Adicionar câmera</span></div>
+        </div>
+
+        <div class="actions-row">
+          <button class="primary" id="saveEquip"><i class="ti ti-device-floppy"></i> Salvar equipamento</button>
+          <button class="ghost" id="clearEquip">Limpar formulário</button>
+        </div>
+      </div>
+
+      <div class="card" id="sub-cliente" style="display:none">
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-user-plus"></i>Dados do cliente</div>
+          <div class="form-grid">
+            <div class="field"><label>Empresa responsável *</label><input type="text" id="cl_empresa" placeholder="GSIA / RP GESTAO..."></div>
+            <div class="field"><label>Cliente (nome) *</label><input type="text" id="cl_nome"></div>
+            <div class="field"><label>Segmento</label><select id="cl_segmento"></select></div>
+            <div class="field"><label>Cidade *</label><input type="text" id="cl_cidade"></div>
+            <div class="field"><label>UF</label><select id="cl_uf"></select></div>
+            <div class="field span2"><label>Endereço</label><input type="text" id="cl_endereco"></div>
+            <div class="field"><label>Responsável</label><input type="text" id="cl_responsavel"></div>
+            <div class="field"><label>Telefone</label><input type="text" id="cl_telefone"></div>
+            <div class="field"><label>E-mail</label><input type="text" id="cl_email"></div>
+            <div class="field"><label>Status</label><select id="cl_status"></select></div>
+            <div class="field span2"><label>Observações</label><input type="text" id="cl_obs"></div>
+          </div>
+        </div>
+        <div class="actions-row">
+          <button class="primary" id="saveCliente"><i class="ti ti-device-floppy"></i> Salvar cliente</button>
+          <button class="ghost" id="clearCliente">Limpar formulário</button>
+        </div>
+      </div>
+
+      <div class="card" id="sub-local" style="display:none">
+        <div class="form-section">
+          <div class="form-section-title"><i class="ti ti-map-pin-plus"></i>Dados do local</div>
+          <div class="form-grid">
+            <div class="field"><label>Cliente *</label><select id="lc_cliente"></select></div>
+            <div class="field"><label>Nome do local *</label><input type="text" id="lc_nome" placeholder="Ex: Torre 2 / Filial Centro"></div>
+            <div class="field"><label>Cidade/Região</label><input type="text" id="lc_cidade"></div>
+            <div class="field"><label>UF</label><select id="lc_uf"></select></div>
+            <div class="field span2"><label>Endereço / referência</label><input type="text" id="lc_end"></div>
+            <div class="field"><label>Status</label><select id="lc_status"></select></div>
+            <div class="field span2"><label>Observações</label><input type="text" id="lc_obs"></div>
+          </div>
+        </div>
+        <div class="actions-row">
+          <button class="primary" id="saveLocal"><i class="ti ti-device-floppy"></i> Salvar local</button>
+          <button class="ghost" id="clearLocal">Limpar formulário</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg"></span></div>
+
+<!-- SCRIPTS -->
+</body>
+</html>
