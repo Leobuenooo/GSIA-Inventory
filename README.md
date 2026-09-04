@@ -3,7 +3,16 @@
 Sistema web para cadastro e consulta do inventário de equipamentos de CFTV
 (clientes → locais → equipamentos → câmeras).
 
-> Em desenvolvimento. Este README será atualizado conforme o projeto evolui.
+## Funcionalidades
+
+- **Pesquisar clientes**: busca por nome, cidade, segmento, ID de cliente,
+  ou por ID/nome de um equipamento ou câmera específica. Drill-down completo
+  cliente → locais → equipamentos → câmeras.
+- **Visão geral**: estatísticas do parque instalado (status de equipamentos
+  e câmeras, distribuição por segmento).
+- **Novo registro**: cadastro de equipamentos (com câmeras associadas),
+  clientes e locais, com geração automática de ID no mesmo padrão da
+  planilha original (CLI001, LOC001, EQP001A, CAM001A...).
 
 ## Estrutura do projeto
 
