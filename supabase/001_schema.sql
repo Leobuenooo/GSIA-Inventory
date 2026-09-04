@@ -119,3 +119,19 @@ create policy "acesso total clientes" on clientes for all using (true) with chec
 create policy "acesso total locais" on locais for all using (true) with check (true);
 create policy "acesso total equipamentos" on equipamentos for all using (true) with check (true);
 create policy "acesso total cameras" on cameras for all using (true) with check (true);
+
+-- ============================================================
+-- Grants explícitos para a Data API (PostgREST)
+--
+-- Desde 30/05/2026 o Supabase parou de expor automaticamente
+-- tabelas novas para a Data API (a camada que o supabase-js usa
+-- por baixo dos panos). Sem este bloco, o app recebe erro de
+-- "tabela não encontrada" mesmo com o RLS liberado acima.
+-- Rodar isso garante que funcione independente da opção marcada
+-- na tela de criação do projeto.
+-- ============================================================
+
+grant select, insert, update, delete on clientes to anon, authenticated;
+grant select, insert, update, delete on locais to anon, authenticated;
+grant select, insert, update, delete on equipamentos to anon, authenticated;
+grant select, insert, update, delete on cameras to anon, authenticated;
