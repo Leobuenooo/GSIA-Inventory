@@ -1,4 +1,5 @@
 // Pesquisa de clientes e detalhamento (cliente → locais → equipamentos → câmeras).
+// Inclui os botões de editar/excluir de cada nível e a edição inline das câmeras.
 
 function renderSidebarStats(){
   const totalClientes = DB.Clientes.length;
@@ -66,6 +67,57 @@ function renderClientList(){
   });
 }
 
+// ---- linha de câmera: modo visualização x modo edição inline ----
+
+function camRowViewHTML(cm){
+  return `
+    <td class="mono">${escapeHtml(cm['Canal']||'—')}</td>
+    <td>${escapeHtml(cm['Nome no Sistema']||'—')}</td>
+    <td>${escapeHtml(cm['Tecnologia']||'—')}</td>
+    <td class="mono">${escapeHtml(cm['IP da câmera (se disponível)']||'—')}</td>
+    <td>${escapeHtml(cm['Posição / Área']||'—')}</td>
+    <td>${badge(cm['Status']||'Online')}</td>
+    <td>
+      <div class="row-actions">
+        <button class="icon-btn accent cam-edit-btn" title="Editar câmera" type="button"><i class="ti ti-pencil"></i></button>
+        <button class="icon-btn danger cam-delete-btn" title="Excluir câmera" type="button"><i class="ti ti-trash"></i></button>
+      </div>
+    </td>`;
+}
+
+function camRowEditHTML(cm){
+  const techOptions = LISTAS.tecnologiaCamera.map(t=>`<option value="${t}" ${cm['Tecnologia']===t?'selected':''}>${t}</option>`).join('');
+  const statusOptions = LISTAS.status.map(s=>`<option value="${s}" ${cm['Status']===s?'selected':''}>${s}</option>`).join('');
+  return `
+    <td class="cam-inline-edit"><input type="number" min="1" class="ic-canal" value="${escapeHtml(cm['Canal']||'')}"></td>
+    <td class="cam-inline-edit"><input type="text" class="ic-nome" value="${escapeHtml(cm['Nome no Sistema']||'')}"></td>
+    <td class="cam-inline-edit"><select class="ic-tech"><option value="">—</option>${techOptions}</select></td>
+    <td class="cam-inline-edit"><input type="text" class="ic-ip" value="${escapeHtml(cm['IP da câmera (se disponível)']||'')}"></td>
+    <td class="cam-inline-edit"><input type="text" class="ic-pos" value="${escapeHtml(cm['Posição / Área']||'')}"></td>
+    <td class="cam-inline-edit"><select class="ic-status">${statusOptions}</select></td>
+    <td>
+      <div class="row-actions">
+        <button class="icon-btn accent cam-save-btn" title="Salvar" type="button"><i class="ti ti-check"></i></button>
+        <button class="icon-btn cam-cancel-btn" title="Cancelar" type="button"><i class="ti ti-x"></i></button>
+      </div>
+    </td>`;
+}
+
+function wireCamRow(tr, camId){
+  tr.querySelector('.cam-edit-btn').addEventListener('click', ()=>{
+    const cam = DB.Cameras.find(c=>c['ID Câmera']===camId);
+    tr.innerHTML = camRowEditHTML(cam);
+    wireCamRow(tr, camId);
+  });
+  tr.querySelector('.cam-delete-btn')?.addEventListener('click', ()=> deleteCamera(camId));
+  tr.querySelector('.cam-save-btn')?.addEventListener('click', ()=> saveInlineCamera(camId, tr));
+  tr.querySelector('.cam-cancel-btn')?.addEventListener('click', ()=>{
+    const cam = DB.Cameras.find(c=>c['ID Câmera']===camId);
+    tr.innerHTML = camRowViewHTML(cam);
+    wireCamRow(tr, camId);
+  });
+}
+
 function openClientDetail(clienteId){
   currentClientId = clienteId;
   const c = DB.Clientes.find(x=>x['ID Cliente']===clienteId);
@@ -88,9 +140,11 @@ function openClientDetail(clienteId){
           <p class="detail-title">${escapeHtml(c['Cliente'])}</p>
           <p class="page-sub">${escapeHtml(c['ID Cliente'])} · ${escapeHtml(c['Empresa responsável']||'—')}</p>
         </div>
-        <div style="display:flex;gap:8px;">
+        <div class="header-actions">
           ${c['Segmento'] ? `<span class="badge seg">${escapeHtml(c['Segmento'])}</span>` : ''}
           ${badge(c['Status']||'Ativo')}
+          <button class="icon-btn accent" id="editClienteBtn" title="Editar cliente"><i class="ti ti-pencil"></i></button>
+          <button class="icon-btn danger" id="deleteClienteBtn" title="Excluir cliente"><i class="ti ti-trash"></i></button>
         </div>
       </div>
       <div class="info-grid">
@@ -119,7 +173,11 @@ function openClientDetail(clienteId){
             <div class="local-head-title">${escapeHtml(local['Nome do Local'])}</div>
             <div class="local-head-sub">${escapeHtml(local['Cidade/Região']||'—')} · ${equipamentos.length} equipamento(s) · ${badge(local['Status']||'Ativo')}</div>
           </div>
-          <i class="ti ti-chevron-down" id="chev-${local['ID Local']}"></i>
+          <div class="local-head-actions">
+            <button class="icon-btn accent local-edit-btn" data-local-edit="${local['ID Local']}" title="Editar local"><i class="ti ti-pencil"></i></button>
+            <button class="icon-btn danger local-delete-btn" data-local-delete="${local['ID Local']}" title="Excluir local"><i class="ti ti-trash"></i></button>
+            <i class="ti ti-chevron-down" id="chev-${local['ID Local']}"></i>
+          </div>
         </div>
         <div class="local-body" id="body-${local['ID Local']}">
       `;
@@ -139,7 +197,11 @@ function openClientDetail(clienteId){
                 <span class="equip-name">${escapeHtml(eq['Nome no SIMNEXT/D-GUARD']||eq['Tipo']||'Equipamento')}</span>
                 <div class="equip-sub">${escapeHtml(eq['Tipo']||'—')} · ${escapeHtml(eq['Fabricante']||'—')} ${escapeHtml(eq['Modelo']||'')} · ${cams.length} câmera(s) · ${badge(eq['Status']||'Ativo')}</div>
               </div>
-              <i class="ti ti-chevron-down"></i>
+              <div class="equip-actions">
+                <button class="icon-btn accent equip-edit-btn" data-equip-edit="${eq['ID Equipamento']}" title="Editar equipamento"><i class="ti ti-pencil"></i></button>
+                <button class="icon-btn danger equip-delete-btn" data-equip-delete="${eq['ID Equipamento']}" title="Excluir equipamento"><i class="ti ti-trash"></i></button>
+                <i class="ti ti-chevron-down"></i>
+              </div>
             </div>
             <div class="equip-cams" id="cams-${eq['ID Equipamento']}">
               <div class="info-grid" style="margin:10px 0 12px;">
@@ -153,17 +215,10 @@ function openClientDetail(clienteId){
               ${eq['Observações'] ? `<div class="info-item" style="margin-bottom:10px;"><div class="lbl">Observações</div><div class="val">${escapeHtml(eq['Observações'])}</div></div>`:''}
               ${cams.length ? `
               <table>
-                <thead><tr><th>Canal</th><th>Nome</th><th>Tecnologia</th><th>IP</th><th>Posição</th><th>Status</th></tr></thead>
+                <thead><tr><th>Canal</th><th>Nome</th><th>Tecnologia</th><th>IP</th><th>Posição</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                   ${cams.sort((a,b)=>(a['Canal']||0)-(b['Canal']||0)).map(cm=>`
-                    <tr>
-                      <td class="mono">${escapeHtml(cm['Canal']||'—')}</td>
-                      <td>${escapeHtml(cm['Nome no Sistema']||'—')}</td>
-                      <td>${escapeHtml(cm['Tecnologia']||'—')}</td>
-                      <td class="mono">${escapeHtml(cm['IP da câmera (se disponível)']||'—')}</td>
-                      <td>${escapeHtml(cm['Posição / Área']||'—')}</td>
-                      <td>${badge(cm['Status']||'Online')}</td>
-                    </tr>
+                    <tr data-cam-row="${cm['ID Câmera']}">${camRowViewHTML(cm)}</tr>
                   `).join('')}
                 </tbody>
               </table>` : `<div class="empty-state" style="padding:14px;"><i class="ti ti-camera-off"></i>Nenhuma câmera cadastrada.</div>`}
@@ -177,20 +232,43 @@ function openClientDetail(clienteId){
 
   detail.innerHTML = html;
   document.getElementById('backToList').addEventListener('click', closeClientDetail);
+  document.getElementById('editClienteBtn').addEventListener('click', ()=> startEditCliente(clienteId));
+  document.getElementById('deleteClienteBtn').addEventListener('click', ()=> deleteCliente(clienteId));
+
   detail.querySelectorAll('.local-head').forEach(h=>{
-    h.addEventListener('click', ()=>{
+    h.addEventListener('click', (evt)=>{
+      if(evt.target.closest('.local-edit-btn') || evt.target.closest('.local-delete-btn')) return;
       const id = h.dataset.local;
       document.getElementById('body-'+id).classList.toggle('open');
       const chev = document.getElementById('chev-'+id);
       chev.style.transform = document.getElementById('body-'+id).classList.contains('open') ? 'rotate(180deg)' : '';
     });
   });
+  detail.querySelectorAll('.local-edit-btn').forEach(btn=>{
+    btn.addEventListener('click', (evt)=>{ evt.stopPropagation(); startEditLocal(btn.dataset.localEdit); });
+  });
+  detail.querySelectorAll('.local-delete-btn').forEach(btn=>{
+    btn.addEventListener('click', (evt)=>{ evt.stopPropagation(); deleteLocal(btn.dataset.localDelete); });
+  });
+
   detail.querySelectorAll('.equip-top').forEach(h=>{
-    h.addEventListener('click', ()=>{
+    h.addEventListener('click', (evt)=>{
+      if(evt.target.closest('.equip-edit-btn') || evt.target.closest('.equip-delete-btn')) return;
       const id = h.dataset.equip;
       document.getElementById('cams-'+id).classList.toggle('open');
     });
   });
+  detail.querySelectorAll('.equip-edit-btn').forEach(btn=>{
+    btn.addEventListener('click', (evt)=>{ evt.stopPropagation(); startEditEquipamento(btn.dataset.equipEdit); });
+  });
+  detail.querySelectorAll('.equip-delete-btn').forEach(btn=>{
+    btn.addEventListener('click', (evt)=>{ evt.stopPropagation(); deleteEquipamento(btn.dataset.equipDelete); });
+  });
+
+  detail.querySelectorAll('tr[data-cam-row]').forEach(tr=>{
+    wireCamRow(tr, tr.dataset.camRow);
+  });
+
   const firstBody = detail.querySelector('.local-body');
   if(firstBody) firstBody.classList.add('open');
 }
