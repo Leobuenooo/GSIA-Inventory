@@ -68,6 +68,7 @@
       </div>
 
       <div class="card" id="sub-equipamento">
+        <div class="edit-banner" id="eq_editBanner" style="display:none;"></div>
         <div class="form-section">
           <div class="form-section-title"><i class="ti ti-building"></i>Cliente e local</div>
           <div class="form-grid">
@@ -126,19 +127,22 @@
           </div>
         </div>
 
-        <div class="form-section">
+        <div class="form-section" id="eq_cameras_section">
           <div class="form-section-title"><i class="ti ti-camera"></i>Câmeras deste equipamento</div>
           <div class="cam-rows" id="camRows"></div>
           <div style="margin-top:10px;"><span class="chip-add" id="addCamRow"><i class="ti ti-plus"></i>Adicionar câmera</span></div>
         </div>
+        <p class="hint" id="eq_cameras_edit_hint" style="display:none;margin:-10px 0 22px;">Para editar ou excluir câmeras deste equipamento, use os ícones na tabela de câmeras (tela Pesquisar).</p>
 
         <div class="actions-row">
           <button class="primary" id="saveEquip"><i class="ti ti-device-floppy"></i> Salvar equipamento</button>
           <button class="ghost" id="clearEquip">Limpar formulário</button>
+          <button class="ghost" id="cancelEditEquip" style="display:none;">Cancelar edição</button>
         </div>
       </div>
 
       <div class="card" id="sub-cliente" style="display:none">
+        <div class="edit-banner" id="cl_editBanner" style="display:none;"></div>
         <div class="form-section">
           <div class="form-section-title"><i class="ti ti-user-plus"></i>Dados do cliente</div>
           <div class="form-grid">
@@ -158,10 +162,12 @@
         <div class="actions-row">
           <button class="primary" id="saveCliente"><i class="ti ti-device-floppy"></i> Salvar cliente</button>
           <button class="ghost" id="clearCliente">Limpar formulário</button>
+          <button class="ghost" id="cancelEditCliente" style="display:none;">Cancelar edição</button>
         </div>
       </div>
 
       <div class="card" id="sub-local" style="display:none">
+        <div class="edit-banner" id="lc_editBanner" style="display:none;"></div>
         <div class="form-section">
           <div class="form-section-title"><i class="ti ti-map-pin-plus"></i>Dados do local</div>
           <div class="form-grid">
@@ -177,6 +183,7 @@
         <div class="actions-row">
           <button class="primary" id="saveLocal"><i class="ti ti-device-floppy"></i> Salvar local</button>
           <button class="ghost" id="clearLocal">Limpar formulário</button>
+          <button class="ghost" id="cancelEditLocal" style="display:none;">Cancelar edição</button>
         </div>
       </div>
 

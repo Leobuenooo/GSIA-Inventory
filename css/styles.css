@@ -127,6 +127,28 @@ tr:last-child td{border-bottom:none;}
 .ov-bar-track{flex:1;height:8px;background:var(--gray-bg);border-radius:5px;overflow:hidden;}
 .ov-bar-fill{height:100%;background:var(--accent);border-radius:5px;}
 .ov-val{width:34px;text-align:right;font-size:12.5px;font-weight:600;flex-shrink:0;}
+
+/* Edição e exclusão */
+.edit-banner{display:flex;align-items:center;gap:8px;background:var(--accent-bg);color:var(--accent-dark);border:1px solid #bfe8e3;border-radius:8px;padding:9px 13px;font-size:13px;font-weight:500;margin-bottom:18px;}
+.hint{font-size:12px;color:var(--text-mut);}
+.header-actions{display:flex;gap:6px;flex-shrink:0;}
+.icon-btn{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text-2);cursor:pointer;flex-shrink:0;padding:0;font-size:14px;}
+.icon-btn:hover{background:var(--gray-bg);color:var(--text);}
+.icon-btn.danger:hover{background:var(--red-bg);color:var(--red);border-color:#f3c9c9;}
+.icon-btn.accent:hover{background:var(--accent-bg);color:var(--accent-dark);border-color:#bfe8e3;}
+.row-actions{display:flex;gap:4px;justify-content:flex-end;}
+.local-head-actions{display:flex;align-items:center;gap:6px;}
+.equip-actions{display:flex;align-items:center;gap:6px;}
+.cam-inline-edit input,.cam-inline-edit select{width:100%;font-size:12.5px;padding:5px 7px;}
+
+/* Estados de carregamento/erro da tela inicial */
+.boot-state{text-align:center;padding:70px 20px;color:var(--text-2);}
+.boot-state i{font-size:30px;display:block;margin-bottom:14px;color:var(--accent);}
+.boot-state.error i{color:var(--red);}
+.boot-state h3{margin:0 0 8px;font-size:16px;color:var(--text);}
+.boot-state p{margin:0 auto;max-width:420px;font-size:13.5px;}
+.boot-state .mono{display:block;margin-top:14px;background:var(--gray-bg);padding:10px 14px;border-radius:8px;font-size:12px;}
+
 @media (max-width:880px){
   .app{flex-direction:column;}
   .sidebar{width:100%;height:auto;position:relative;display:flex;align-items:center;overflow-x:auto;padding:10px 12px;}

@@ -51,8 +51,11 @@ function setupFormPopulation(){
 
   document.getElementById('saveEquip').addEventListener('click', saveEquipamento);
   document.getElementById('clearEquip').addEventListener('click', resetEquipForm);
+  document.getElementById('cancelEditEquip').addEventListener('click', cancelEditEquip);
   document.getElementById('saveCliente').addEventListener('click', saveClienteForm);
   document.getElementById('clearCliente').addEventListener('click', resetClienteForm);
+  document.getElementById('cancelEditCliente').addEventListener('click', cancelEditCliente);
   document.getElementById('saveLocal').addEventListener('click', saveLocalForm);
   document.getElementById('clearLocal').addEventListener('click', resetLocalForm);
+  document.getElementById('cancelEditLocal').addEventListener('click', cancelEditLocal);
 }
