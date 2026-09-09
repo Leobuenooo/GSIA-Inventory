@@ -31,7 +31,8 @@ INSERT INTO clientes (empresa_responsavel, id_cliente, cliente, segmento, cidade
   ('GSIA', 'CLI029', 'PARC ATHENNEE', 'Residencial', 'Barueri', 'SP', NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, 0, 'OK'),
   ('GSIA', 'CLI030', 'TRANSDATA', 'Residencial', 'Barueri', 'SP', NULL, NULL, NULL, NULL, 'Inativo', 'SEM DVRS E MIBO OFF', 1, 0, 0, 'OK'),
   ('GSIA', 'CLI031', 'TRANSDATA JUNDIAI', 'Residencial', 'Jundiai', 'SP', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 'OK'),
-  ('GSIA', 'CLI032', 'VOESTALPINE PERUS', 'Industria', 'Perus', 'SP', NULL, NULL, NULL, NULL, 'Inativo', 'SEM DVRS OU MIBOS NO SISTEMA', 1, 0, 0, 'OK');
+  ('GSIA', 'CLI032', 'VOESTALPINE PERUS', 'Industria', 'Perus', 'SP', NULL, NULL, NULL, NULL, 'Inativo', 'SEM DVRS OU MIBOS NO SISTEMA', 1, 0, 0, 'OK')
+ON CONFLICT (id_cliente) DO NOTHING;
 
 -- Locais: 32 registros
 INSERT INTO locais (id_local, id_cliente, nome_cliente, nome_local, cidade_regiao, uf, endereco_referencia, qtde_equipamentos, qtde_cameras, status, observacoes, validacao) VALUES
@@ -66,7 +67,8 @@ INSERT INTO locais (id_local, id_cliente, nome_cliente, nome_local, cidade_regia
   ('LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 'Barueri', 'SP', NULL, 3, 6, NULL, 'Serviço: TORRE SIA Security | CFTV: Não informado | Alarme: Não informado | Torre: SIM | Mibo: SIM', 'OK'),
   ('LOC030', 'CLI030', 'TRANSDATA', 'TRANSDATA - Barueri', 'Barueri', 'SP', NULL, 0, 0, NULL, 'Serviço: MONITORAMENTO | CFTV: SIM | Alarme: Não informado | Torre: Não informado | Mibo: SIM', 'OK'),
   ('LOC031', 'CLI031', 'TRANSDATA JUNDIAI', 'TRANSDATA - Jundiai', 'Jundiai', 'SP', NULL, 1, 1, NULL, 'Serviço: MONITORAMENTO | CFTV: SIM | Alarme: Não informado | Torre: Não informado | Mibo: SIM', 'OK'),
-  ('LOC032', 'CLI032', 'VOESTALPINE PERUS', 'VOESTALPINE PERUS - Perus', 'Perus', 'SP', NULL, 0, 0, NULL, 'Serviço: TORRE SIA Security | CFTV: Não informado | Alarme: Não informado | Torre: SIM | Mibo: SIM', 'OK');
+  ('LOC032', 'CLI032', 'VOESTALPINE PERUS', 'VOESTALPINE PERUS - Perus', 'Perus', 'SP', NULL, 0, 0, NULL, 'Serviço: TORRE SIA Security | CFTV: Não informado | Alarme: Não informado | Torre: SIM | Mibo: SIM', 'OK')
+ON CONFLICT (id_local) DO NOTHING;
 
 -- Equipamentos: 51 registros
 INSERT INTO equipamentos (id_equipamento, id_local, id_cliente, nome_cliente, nome_local, tipo, nome_sistema, fabricante, modelo, cloud_id, ipv4_local, mac, gateway, mascara, dns_primario, dns_secundario, porta_http, porta_servico, firmware, qtde_canais, cameras_cadastradas, usuario, senha, status, ultima_atualizacao, origem_informacao, observacoes, validacao) VALUES
@@ -120,7 +122,8 @@ INSERT INTO equipamentos (id_equipamento, id_local, id_cliente, nome_cliente, no
   ('EQP029A', 'LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 'POSTE', 'POSTE PARC ATHENNE', 'Intelbras', 'NVD 1416', 'BY7M5001777HB', '10.0.0.218', '54:6c:ac:48:39:4b', '10.0.0.1', '255.255.255.0', '10.0.0.1', '8.8.4.4', '80', '37777', NULL, 16, 4, 'admin', 'visual25', 'Online', NULL, 'SIM Next', 'DVR com 4 cameras ip instaladas', 'OK'),
   ('EQP029B', 'LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 'MIBO', 'CONDOMINIO PARC ATHENNE', 'Intelbras', 'IMX C', 'IA8M0902923RM', '10.0.0.213', '80:85:44:9B:70:9F', '10.0.0.1', '255.255.255.0', NULL, NULL, '80', '37777', NULL, 1, 1, NULL, NULL, 'Online', NULL, 'MIBOAPP', 'MIBOCAM', 'OK'),
   ('EQP029C', 'LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 'MIBO', 'P2 PARC ATHENNE', 'Intelbras', 'IM5 M FULL COLOR', 'DBI0002410045', '192.168.1.107', '98:E5:5B:3F:AB:1B/98:E5:5B:3F:AB:1A', '192.168.1.1', '255.255.255.0', NULL, NULL, '80', '37777', NULL, 1, 1, NULL, NULL, 'Online', NULL, 'MIBOAPP', 'MIBOCAM', 'OK'),
-  ('EQP031A', 'LOC031', 'CLI031', 'TRANSDATA JUNDIAI', 'TRANSDATA - Jundiai', 'MIBO', 'TRANS JUNDAÍ', 'Intelbras', 'IM4 C', 'XYPJ451142935', '10.20.20.123', '48.51.CF.AF.73.FC/48.51.CF.AF.73.FC', '10.20.20.1', '255.255.255.0', NULL, NULL, '80', '37777', NULL, 1, 1, NULL, NULL, 'Online', NULL, 'MIBOAPP', 'MIBOCAM', 'OK');
+  ('EQP031A', 'LOC031', 'CLI031', 'TRANSDATA JUNDIAI', 'TRANSDATA - Jundiai', 'MIBO', 'TRANS JUNDAÍ', 'Intelbras', 'IM4 C', 'XYPJ451142935', '10.20.20.123', '48.51.CF.AF.73.FC/48.51.CF.AF.73.FC', '10.20.20.1', '255.255.255.0', NULL, NULL, '80', '37777', NULL, 1, 1, NULL, NULL, 'Online', NULL, 'MIBOAPP', 'MIBOCAM', 'OK')
+ON CONFLICT (id_equipamento) DO NOTHING;
 
 -- Cameras: 358 registros
 INSERT INTO cameras (id_camera, id_equipamento, id_local, id_cliente, nome_cliente, nome_local, canal, nome_sistema, tecnologia, fabricante, ip_camera, posicao_area, status, ultima_atualizacao, observacoes) VALUES
@@ -481,4 +484,5 @@ INSERT INTO cameras (id_camera, id_equipamento, id_local, id_cliente, nome_clien
   ('CAM029D', 'EQP029A', 'LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 4, 'PORTARIA', 'IP', 'intelbras', NULL, 'interno', 'Online', NULL, NULL),
   ('CAM029Q', 'EQP029B', 'LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 1, 'CONDOMINIO PARC ATHENNE', 'Wifi', 'intelbras', '10.0.0.213', 'interno', 'Online', NULL, NULL),
   ('CAM029R', 'EQP029C', 'LOC029', 'CLI029', 'PARC ATHENNEE', 'PARC ATHENNEE - Barueri', 1, 'P2 PARC ATHENNE', 'Wifi', 'intelbras', '192.168.1.107', 'interno', 'Online', NULL, NULL),
-  ('CAM031A', 'EQP031A', 'LOC031', 'CLI031', 'TRANSDATA JUNDIAI', 'TRANSDATA - Jundiai', 1, 'TRANSDATA JUNDIAI', 'Wifi', 'intelbras', '10.20.20.123', 'interno', 'Online', NULL, NULL);
+  ('CAM031A', 'EQP031A', 'LOC031', 'CLI031', 'TRANSDATA JUNDIAI', 'TRANSDATA - Jundiai', 1, 'TRANSDATA JUNDIAI', 'Wifi', 'intelbras', '10.20.20.123', 'interno', 'Online', NULL, NULL)
+ON CONFLICT (id_camera) DO NOTHING;

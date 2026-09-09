@@ -6,7 +6,7 @@
 create table if not exists clientes (
   id_cliente text primary key,
   empresa_responsavel text,
-  cliente text not null,
+  cliente text,
   segmento text,
   cidade text,
   uf text,
@@ -27,7 +27,7 @@ create table if not exists locais (
   id_local text primary key,
   id_cliente text not null references clientes(id_cliente) on delete cascade,
   nome_cliente text,
-  nome_local text not null,
+  nome_local text,
   cidade_regiao text,
   uf text,
   endereco_referencia text,
@@ -45,7 +45,7 @@ create table if not exists equipamentos (
   id_cliente text not null references clientes(id_cliente) on delete cascade,
   nome_cliente text,
   nome_local text,
-  tipo text not null,
+  tipo text,
   nome_sistema text,
   fabricante text,
   modelo text,
@@ -96,6 +96,18 @@ create index if not exists idx_equip_local on equipamentos(id_local);
 create index if not exists idx_equip_cliente on equipamentos(id_cliente);
 create index if not exists idx_cameras_equip on cameras(id_equipamento);
 create index if not exists idx_cameras_cliente on cameras(id_cliente);
+
+-- ============================================================
+-- Corrige tabelas que já existiam de uma execução anterior deste script.
+-- "create table if not exists" não altera colunas de uma tabela que já
+-- existe — por isso, se você já rodou uma versão anterior deste arquivo,
+-- os "alter column" abaixo garantem que essas colunas fiquem opcionais
+-- (dados antigos da planilha às vezes vêm incompletos). Rodar de novo
+-- não dá erro mesmo se a coluna já estiver nula-permitida.
+-- ============================================================
+alter table clientes alter column cliente drop not null;
+alter table locais alter column nome_local drop not null;
+alter table equipamentos alter column tipo drop not null;
 
 -- ============================================================
 -- Row Level Security
