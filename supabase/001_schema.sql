@@ -115,9 +115,19 @@ alter table locais enable row level security;
 alter table equipamentos enable row level security;
 alter table cameras enable row level security;
 
+-- "drop ... if exists" antes de cada "create policy" porque o Postgres não
+-- tem "create policy if not exists" — sem isso, rodar o script uma segunda
+-- vez (por engano, ou para reaplicar depois de um erro) quebra aqui.
+drop policy if exists "acesso total clientes" on clientes;
 create policy "acesso total clientes" on clientes for all using (true) with check (true);
+
+drop policy if exists "acesso total locais" on locais;
 create policy "acesso total locais" on locais for all using (true) with check (true);
+
+drop policy if exists "acesso total equipamentos" on equipamentos;
 create policy "acesso total equipamentos" on equipamentos for all using (true) with check (true);
+
+drop policy if exists "acesso total cameras" on cameras;
 create policy "acesso total cameras" on cameras for all using (true) with check (true);
 
 -- ============================================================
