@@ -2,11 +2,13 @@
 
 Sistema web para cadastro e consulta do inventário de equipamentos de CFTV
 (clientes → locais → equipamentos → câmeras), com banco de dados real
-(Supabase / PostgreSQL) — os dados são compartilhados entre todo mundo que
-acessa o app, não ficam presos a um computador.
+(Supabase / PostgreSQL) e login — os dados são compartilhados entre todo
+mundo que acessa o app, e só entra quem tiver uma conta criada.
 
 ## Funcionalidades
 
+- **Login**: acesso protegido por e-mail/senha (Supabase Auth). Não tem
+  cadastro público — as contas são criadas manualmente pelo administrador.
 - **Pesquisar clientes**: busca por nome, cidade, segmento, ID de cliente,
   ou por ID/nome de um equipamento ou câmera específica. Drill-down completo
   cliente → locais → equipamentos → câmeras.
@@ -27,7 +29,7 @@ acessa o app, não ficam presos a um computador.
 
 ```
 gsia-inventario/
-├── index.html               Estrutura da página
+├── index.html               Estrutura da página (inclui a tela de login)
 ├── css/
 │   └── styles.css           Estilos
 ├── js/
@@ -36,15 +38,20 @@ gsia-inventario/
 │   ├── helpers.js            Funções utilitárias (badges, toasts, geração de ID)
 │   ├── config.js              Credenciais do Supabase (preencher você mesmo)
 │   ├── storage.js             Acesso ao banco Supabase (CRUD real)
-│   ├── actions.js              Exclusão de registros e edição inline de câmeras
-│   ├── render-search.js         Pesquisa e detalhamento de clientes
-│   ├── render-overview.js        Painel de visão geral
-│   ├── forms.js                   Formulários de cadastro e edição
-│   ├── nav.js                      Navegação entre telas
-│   └── main.js                      Inicialização da aplicação
+│   ├── auth.js                 Login, logout e verificação de sessão
+│   ├── actions.js               Exclusão de registros e edição inline de câmeras
+│   ├── render-search.js          Pesquisa e detalhamento de clientes
+│   ├── render-overview.js         Painel de visão geral
+│   ├── forms.js                    Formulários de cadastro e edição
+│   ├── nav.js                       Navegação entre telas
+│   └── main.js                       Inicialização da aplicação (login → app)
+├── assets/
+│   ├── logo.png              Logo da empresa (menu lateral)
+│   └── favicon.png           Ícone da aba do navegador
 ├── supabase/
 │   ├── 001_schema.sql        Tabelas, chaves estrangeiras e permissões
-│   └── 002_seed.sql           Dados da planilha original, prontos para importar
+│   ├── 002_seed.sql           Dados da planilha original, prontos para importar
+│   └── 003_auth_policies.sql   Fecha o acesso: só usuário logado lê/grava
 └── README.md
 ```
 
@@ -55,12 +62,24 @@ gsia-inventario/
 2. No painel do projeto, abra o **SQL Editor** e rode, nessa ordem:
    - o conteúdo de `supabase/001_schema.sql`
    - o conteúdo de `supabase/002_seed.sql` (importa os dados da planilha original)
+   - o conteúdo de `supabase/003_auth_policies.sql` (exige login para acessar os dados)
 3. Vá em **Project Settings → Data API** e copie a **Project URL** e a
    chave **anon public**.
 4. Cole essas duas informações em `js/config.js`, nos campos `SUPABASE_URL`
    e `SUPABASE_ANON_KEY`.
 
-## Como rodar
+## Como criar os logins de acesso
+
+Não existe tela de "criar conta" — isso é proposital, pra ninguém de fora
+conseguir se cadastrar sozinho. Quem administra o Supabase cria as contas:
+
+1. No painel do Supabase, vá em **Authentication → Users → Add user**.
+2. Preencha e-mail e senha da pessoa (você, seu chefe, etc.).
+3. Marque **Auto Confirm User** — sem isso, a conta pede confirmação por
+   e-mail antes de conseguir logar.
+4. Repita pra cada pessoa que precisa de acesso.
+
+## Como rodar localmente
 
 Abra o `index.html` direto no navegador (duplo clique), ou use a extensão
 **Live Server** do VS Code para recarregamento automático durante o
@@ -68,17 +87,34 @@ desenvolvimento. Se aparecer uma tela de erro dizendo que não conseguiu
 carregar os dados, confira o passo a passo acima — geralmente é
 `js/config.js` sem as credenciais preenchidas.
 
+## Como publicar pro seu chefe acessar (GitHub Pages)
+
+Isso coloca o app num link público (tipo
+`https://seu-usuario.github.io/gsia-inventario/`), sem precisar de você
+rodando nada localmente.
+
+1. Suba esse projeto pro GitHub (veja a seção de commits/histórico abaixo
+   se estiver reaproveitando um repositório que já existia).
+2. No GitHub, vá em **Settings → Pages** do repositório.
+3. Em "Source", escolha **Deploy from a branch**, branch **main**, pasta
+   **/ (root)**. Salve.
+4. Espere cerca de 1 minuto. O GitHub mostra o link do site no topo dessa
+   mesma página — é esse link que você compartilha.
+
+O `js/config.js` com a URL/chave do Supabase fica público nesse link, e
+isso é esperado — a chave "anon" é feita pra ser pública, e agora a
+segurança de verdade está nas políticas de login (`003_auth_policies.sql`),
+não em esconder essa chave.
+
 ## Dados e segurança
 
-Os dados agora ficam num banco Postgres real na nuvem (Supabase),
-compartilhado entre todos que acessam o app — diferente da versão anterior
-com `localStorage`, que ficava presa a um computador.
+Os dados ficam num banco Postgres real na nuvem (Supabase), compartilhado
+entre todos que acessam o app.
 
-O acesso ao banco está liberado para quem tiver a URL + chave do projeto
-(ver comentário em `supabase/001_schema.sql`), sem exigir login. Isso é
-adequado para uso interno restrito. Se no futuro for necessário controlar
-quem pode editar/excluir (ex: só o gestor pode excluir), dá para adicionar
-login via Supabase Auth e trocar as políticas de RLS.
+Desde `003_auth_policies.sql`, só consegue ler ou gravar dados quem
+estiver logado — tanto a tela de login quanto o próprio banco (RLS)
+bloqueiam quem não tem conta. Antes disso, o acesso era aberto pra
+qualquer pessoa com a URL + chave; isso foi corrigido.
 
 O plano gratuito do Supabase pausa o projeto automaticamente após 7 dias
 sem uso — é só entrar no painel e clicar em "restaurar" (leva menos de um
