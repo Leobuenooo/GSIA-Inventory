@@ -1,10 +1,10 @@
 // Ponto de entrada da aplicação. Roda depois de todos os outros módulos
 // terem sido carregados (ver ordem dos <script> no index.html).
 //
-// Como initDB() agora busca os dados no Supabase pela rede, a inicialização
-// é assíncrona: mostramos um estado de carregamento e, se a conexão falhar
-// (ex: credenciais não preenchidas em js/config.js, ou sem internet),
-// mostramos uma mensagem de erro em vez de uma tela em branco.
+// Fluxo: primeiro verifica se já existe uma sessão de login válida
+// (o supabase-js guarda isso automaticamente no navegador). Se não
+// houver, mostra a tela de login e só carrega os dados depois que o
+// login der certo.
 
 function showBootLoading(){
   document.getElementById('clientList').innerHTML = `
@@ -25,7 +25,8 @@ function showBootError(){
     </div>`;
 }
 
-async function boot(){
+// Carrega os dados e liga a interface — só é chamado depois de confirmado o login.
+async function startApp(){
   showBootLoading();
   const ok = await initDB();
   if(!ok){
@@ -37,6 +38,17 @@ async function boot(){
   setupNav();
   setupFormPopulation();
   document.getElementById('searchInput').addEventListener('input', renderClientList);
+}
+
+async function boot(){
+  setupAuthUI();
+  const session = await checkSession();
+  if(session){
+    hideLoginScreen();
+    await startApp();
+  } else {
+    showLoginScreen();
+  }
 }
 
 boot();

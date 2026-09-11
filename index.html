@@ -9,7 +9,24 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<div class="app">
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo"><img src="assets/logo.png" alt="Logo GSIA"></div>
+    <h1>GSIA Inventário</h1>
+    <p class="login-sub">Entre com a conta que o administrador criou para você.</p>
+    <div class="field">
+      <label>E-mail</label>
+      <input type="email" id="login_email" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="login_password" autocomplete="current-password">
+    </div>
+    <div class="login-error" id="loginError" style="display:none;"></div>
+    <button class="primary" id="loginBtn" style="width:100%;justify-content:center;">Entrar</button>
+  </div>
+</div>
+<div class="app" id="appRoot">
   <div class="sidebar">
     <div class="brand">
       <div class="brand-mark"><img src="assets/logo.png" alt="Logo GSIA"></div>
@@ -26,6 +43,7 @@
       <div class="nav-item" data-view="cadastro"><span class="nav-icon"><i class="ti ti-plus"></i></span>Novo registro</div>
     </div>
     <div class="sidebar-stats" id="sidebarStats"></div>
+    <div class="sidebar-logout" id="logoutBtn"><i class="ti ti-logout"></i> Sair</div>
   </div>
 
   <div class="main">
@@ -207,6 +225,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/actions.js"></script>
 <script src="js/render-search.js"></script>
 <script src="js/render-overview.js"></script>
