@@ -8,6 +8,7 @@ function statusClass(status){
   if(s.includes('manuten')) return 'st-manutencao';
   if(s.includes('desativ')) return 'st-desativado';
   if(s.includes('inativ')) return 'st-inativo';
+  if(s.includes('ativo')) return 'st-online'; // "Ativo" (status de cliente) = mesmo verde do "Online"
   return 'st-nao-verificado';
 }
 

@@ -2,6 +2,7 @@
   --bg:#f3f4f6; --panel:#ffffff; --sidebar:#12161c; --sidebar-text:#a6adba; --sidebar-text-active:#ffffff;
   --border:#e3e5ea; --text:#1a1d24; --text-2:#5b6472; --text-mut:#8b93a1;
   --accent:#0d9488; --accent-dark:#0b7a70; --accent-bg:#e6f5f3;
+  --info:#3651c7; --info-bg:#e9ecfb;
   --green:#15803d; --green-bg:#e9f7ee; --red:#b91c1c; --red-bg:#fdecec;
   --amber:#b45309; --amber-bg:#fdf3e0; --gray:#4b5563; --gray-bg:#eef0f3;
   --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -57,7 +58,7 @@ button.danger-outline:hover{background:var(--red-bg);}
 .badge.st-offline{background:var(--red-bg);color:var(--red);} .badge.st-offline .dot{background:var(--red);}
 .badge.st-manutencao{background:var(--amber-bg);color:var(--amber);} .badge.st-manutencao .dot{background:var(--amber);}
 .badge.st-desativado,.badge.st-inativo,.badge.st-nao-verificado{background:var(--gray-bg);color:var(--gray);} .badge.st-desativado .dot,.badge.st-inativo .dot,.badge.st-nao-verificado .dot{background:var(--gray);}
-.badge.seg{background:var(--accent-bg);color:var(--accent-dark);}
+.badge.seg{background:var(--info-bg);color:var(--info);}
 .client-card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 16px;cursor:pointer;transition:border-color .12s,box-shadow .12s;margin-bottom:10px;}
 .client-card:hover{border-color:var(--accent);box-shadow:0 1px 6px rgba(13,148,136,.10);}
 .client-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
