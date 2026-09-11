@@ -49,6 +49,8 @@ function setupFormPopulation(){
   document.getElementById('addCamRow').addEventListener('click', ()=> addCamRow());
   addCamRow();
 
+  setupPasswordToggle('eq_pass', 'eq_pass_toggle');
+
   document.getElementById('saveEquip').addEventListener('click', saveEquipamento);
   document.getElementById('clearEquip').addEventListener('click', resetEquipForm);
   document.getElementById('cancelEditEquip').addEventListener('click', cancelEditEquip);

@@ -116,7 +116,13 @@
             <div class="field"><label>Porta HTTP</label><input type="number" id="eq_porthttp" value="80"></div>
             <div class="field"><label>Porta serviço</label><input type="number" id="eq_portsvc" value="37777"></div>
             <div class="field"><label>Usuário</label><input type="text" id="eq_user"></div>
-            <div class="field"><label>Senha</label><input type="text" id="eq_pass"></div>
+            <div class="field">
+              <label>Senha</label>
+              <div class="password-field">
+                <input type="password" id="eq_pass" autocomplete="new-password">
+                <button type="button" class="icon-btn password-toggle" id="eq_pass_toggle" title="Mostrar/ocultar senha"><i class="ti ti-eye"></i></button>
+              </div>
+            </div>
           </div>
         </div>
 

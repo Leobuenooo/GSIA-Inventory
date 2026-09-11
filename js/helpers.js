@@ -75,3 +75,13 @@ function nextChildId(baseId, list, idField, parentField, parentId){
   const count = siblings.length;
   return baseId + letterSuffix(count);
 }
+
+function setupPasswordToggle(inputId, btnId){
+  const input = document.getElementById(inputId);
+  const btn = document.getElementById(btnId);
+  btn.addEventListener('click', ()=>{
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.querySelector('i').className = showing ? 'ti ti-eye' : 'ti ti-eye-off';
+  });
+}
