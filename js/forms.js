@@ -363,8 +363,8 @@ function startEditCliente(clienteId){
   document.getElementById('cl_uf').value = cliente['UF'] || 'SP';
   document.getElementById('cl_endereco').value = cliente['Endereço'] || '';
   document.getElementById('cl_responsavel').value = cliente['Responsável'] || '';
-  document.getElementById('cl_telefone').value = cliente['Telefone'] || '';
-  document.getElementById('cl_email').value = cliente['E-mail'] || '';
+  document.getElementById('cl_cnpj').value = cliente['CNPJ'] || '';
+  document.getElementById('cl_plano').value = cliente['Plano'] || '';
   document.getElementById('cl_status').value = cliente['Status'] || 'Ativo';
   document.getElementById('cl_obs').value = cliente['Observações'] || '';
 
@@ -400,8 +400,8 @@ async function saveClienteForm(){
     'UF': document.getElementById('cl_uf').value,
     'Endereço': document.getElementById('cl_endereco').value.trim(),
     'Responsável': document.getElementById('cl_responsavel').value.trim(),
-    'Telefone': document.getElementById('cl_telefone').value.trim(),
-    'E-mail': document.getElementById('cl_email').value.trim(),
+    'CNPJ': document.getElementById('cl_cnpj').value.trim(),
+    'Plano': document.getElementById('cl_plano').value,
     'Status': document.getElementById('cl_status').value || 'Ativo',
     'Observações': document.getElementById('cl_obs').value.trim(),
   };
@@ -436,9 +436,10 @@ async function saveClienteForm(){
 
 function resetClienteForm(){
   editingClienteId = null;
-  ['cl_empresa','cl_nome','cl_cidade','cl_endereco','cl_responsavel','cl_telefone','cl_email','cl_obs']
+  ['cl_empresa','cl_nome','cl_cidade','cl_endereco','cl_responsavel','cl_cnpj','cl_obs']
     .forEach(id=> document.getElementById(id).value='');
   document.getElementById('cl_segmento').value='';
+  document.getElementById('cl_plano').value='';
   document.getElementById('cl_uf').value='SP';
   document.getElementById('cl_status').value='Ativo';
   document.getElementById('cl_editBanner').style.display = 'none';

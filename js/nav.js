@@ -55,6 +55,7 @@ function setupFormPopulation(){
   document.getElementById('eq_nl_uf').value = 'SP';
 
   fillSelect(document.getElementById('cl_segmento'), LISTAS.segmento, 'Selecione o segmento');
+  fillSelect(document.getElementById('cl_plano'), LISTAS.plano, 'Selecione o plano');
   fillSelect(document.getElementById('cl_uf'), LISTAS.uf);
   document.getElementById('cl_uf').value='SP';
   fillSelect(document.getElementById('cl_status'), ['Ativo','Inativo']);

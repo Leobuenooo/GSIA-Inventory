@@ -150,9 +150,9 @@ function openClientDetail(clienteId){
       <div class="info-grid">
         <div class="info-item"><div class="lbl">Cidade/UF</div><div class="val">${escapeHtml(c['Cidade']||'—')} / ${escapeHtml(c['UF']||'—')}</div></div>
         <div class="info-item"><div class="lbl">Endereço</div><div class="val">${escapeHtml(c['Endereço']||'—')}</div></div>
-        <div class="info-item"><div class="lbl">Responsável</div><div class="val">${escapeHtml(c['Responsável']||'—')}</div></div>
-        <div class="info-item"><div class="lbl">Telefone</div><div class="val">${escapeHtml(c['Telefone']||'—')}</div></div>
-        <div class="info-item"><div class="lbl">E-mail</div><div class="val">${escapeHtml(c['E-mail']||'—')}</div></div>
+        <div class="info-item"><div class="lbl">Zelador Responsável</div><div class="val">${escapeHtml(c['Responsável']||'—')}</div></div>
+        <div class="info-item"><div class="lbl">CNPJ</div><div class="val">${escapeHtml(c['CNPJ']||'—')}</div></div>
+        <div class="info-item"><div class="lbl">Plano</div><div class="val">${escapeHtml(c['Plano']||'—')}</div></div>
         <div class="info-item"><div class="lbl">Locais / Equip. / Câmeras</div><div class="val">${locais.length} / ${equipCount} / ${camCount}</div></div>
       </div>
       ${c['Observações'] ? `<div class="info-item" style="margin-top:12px;"><div class="lbl">Observações</div><div class="val">${escapeHtml(c['Observações'])}</div></div>` : ''}
