@@ -1,14 +1,39 @@
 // Navegação entre telas (sidebar + sub-abas de cadastro) e preenchimento
 // inicial dos selects dos formulários.
 
+// Troca a tela principal ativa (sidebar). Reaproveitada tanto pelo clique
+// no menu quanto pelo "voltar pra pesquisa depois de editar" (forms.js).
+function goToView(viewName){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const navItem = document.querySelector(`.nav-item[data-view="${viewName}"]`);
+  if(navItem) navItem.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+viewName).classList.add('active');
+  if(viewName === 'overview') renderOverview();
+}
+
+// Depois de salvar ou cancelar uma edição, volta pra tela de onde a
+// edição foi iniciada (a pesquisa), reabrindo o cliente que estava
+// aberto. Sem isso, editar algo "sequestra" a navegação pra tela de
+// cadastro e a pessoa perde o lugar onde estava.
+function returnToPesquisaAposEdicao(){
+  goToView('pesquisar');
+  if(currentClientId) openClientDetail(currentClientId);
+}
+
 function setupNav(){
   document.querySelectorAll('.nav-item').forEach(item=>{
     item.addEventListener('click', ()=>{
-      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-      item.classList.add('active');
-      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-      document.getElementById('view-'+item.dataset.view).classList.add('active');
-      if(item.dataset.view === 'overview') renderOverview();
+      // Se a pessoa sair da tela de cadastro no meio de uma edição sem
+      // salvar nem cancelar explicitamente, descarta a edição em
+      // andamento — evita deixar campos desabilitados/formulário "preso"
+      // num estado de edição escondido para a próxima vez que ela voltar.
+      if(item.dataset.view !== 'cadastro'){
+        if(editingClienteId) resetClienteForm();
+        if(editingLocalId) resetLocalForm();
+        if(editingEquipId) resetEquipForm();
+      }
+      goToView(item.dataset.view);
     });
   });
   document.querySelectorAll('.subform-tab').forEach(tab=>{

@@ -79,10 +79,7 @@ function startEditEquipamento(equipId){
   if(!equip) return;
   editingEquipId = equipId;
 
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.querySelector('.nav-item[data-view="cadastro"]').classList.add('active');
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-cadastro').classList.add('active');
+  goToView('cadastro');
   document.querySelectorAll('.subform-tab').forEach(t=>t.classList.remove('active'));
   document.querySelector('.subform-tab[data-sub="equipamento"]').classList.add('active');
   ['equipamento','cliente','local'].forEach(k=>{
@@ -131,6 +128,7 @@ function startEditEquipamento(equipId){
 
 function cancelEditEquip(){
   resetEquipForm();
+  returnToPesquisaAposEdicao();
 }
 
 async function saveEquipamento(){
@@ -169,6 +167,7 @@ async function saveEquipamento(){
       Object.assign(equip, patch);
       showToast(`Equipamento ${editingEquipId} atualizado com sucesso.`);
       resetEquipForm();
+      returnToPesquisaAposEdicao();
     }catch(err){
       showToast('Não foi possível salvar as alterações. Verifique sua conexão.', 'ti-alert-triangle');
     }
@@ -350,10 +349,7 @@ function startEditCliente(clienteId){
   if(!cliente) return;
   editingClienteId = clienteId;
 
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.querySelector('.nav-item[data-view="cadastro"]').classList.add('active');
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-cadastro').classList.add('active');
+  goToView('cadastro');
   document.querySelectorAll('.subform-tab').forEach(t=>t.classList.remove('active'));
   document.querySelector('.subform-tab[data-sub="cliente"]').classList.add('active');
   ['equipamento','cliente','local'].forEach(k=>{
@@ -383,6 +379,7 @@ function startEditCliente(clienteId){
 
 function cancelEditCliente(){
   resetClienteForm();
+  returnToPesquisaAposEdicao();
 }
 
 async function saveClienteForm(){
@@ -409,6 +406,8 @@ async function saveClienteForm(){
     'Observações': document.getElementById('cl_obs').value.trim(),
   };
 
+  const wasEditing = !!editingClienteId;
+
   try{
     if(editingClienteId){
       await dbUpdate('clientes', editingClienteId, patch);
@@ -429,6 +428,7 @@ async function saveClienteForm(){
     renderSidebarStats();
     refreshEquipClienteOptions();
     refreshLocalClienteOptions();
+    if(wasEditing) returnToPesquisaAposEdicao();
   }catch(err){
     showToast('Não foi possível salvar no banco. Verifique sua conexão.', 'ti-alert-triangle');
   }
@@ -465,10 +465,7 @@ function startEditLocal(localId){
   if(!local) return;
   editingLocalId = localId;
 
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.querySelector('.nav-item[data-view="cadastro"]').classList.add('active');
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-cadastro').classList.add('active');
+  goToView('cadastro');
   document.querySelectorAll('.subform-tab').forEach(t=>t.classList.remove('active'));
   document.querySelector('.subform-tab[data-sub="local"]').classList.add('active');
   ['equipamento','cliente','local'].forEach(k=>{
@@ -496,6 +493,7 @@ function startEditLocal(localId){
 
 function cancelEditLocal(){
   resetLocalForm();
+  returnToPesquisaAposEdicao();
 }
 
 async function saveLocalForm(){
@@ -517,6 +515,8 @@ async function saveLocalForm(){
     'Status': document.getElementById('lc_status').value || 'Online',
     'Observações': document.getElementById('lc_obs').value.trim(),
   };
+
+  const wasEditing = !!editingLocalId;
 
   try{
     if(editingLocalId){
@@ -544,6 +544,7 @@ async function saveLocalForm(){
     resetLocalForm();
     renderSidebarStats();
     refreshEquipClienteOptions();
+    if(wasEditing) returnToPesquisaAposEdicao();
   }catch(err){
     showToast('Não foi possível salvar no banco. Verifique sua conexão.', 'ti-alert-triangle');
   }
