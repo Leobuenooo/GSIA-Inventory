@@ -39,6 +39,7 @@ function setupFormPopulation(){
   fillSelect(document.getElementById('lc_status'), LISTAS.status);
 
   refreshEquipClienteOptions();
+  refreshEquipLocalOptions();
   refreshLocalClienteOptions();
 
   document.getElementById('eq_cliente').addEventListener('change', refreshEquipLocalOptions);
