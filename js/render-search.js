@@ -104,7 +104,7 @@ function camRowEditHTML(cm){
 }
 
 function wireCamRow(tr, camId){
-  tr.querySelector('.cam-edit-btn').addEventListener('click', ()=>{
+  tr.querySelector('.cam-edit-btn')?.addEventListener('click', ()=>{
     const cam = DB.Cameras.find(c=>c['ID Câmera']===camId);
     tr.innerHTML = camRowEditHTML(cam);
     wireCamRow(tr, camId);
