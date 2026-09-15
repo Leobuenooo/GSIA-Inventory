@@ -51,7 +51,8 @@ gsia-inventario/
 ├── supabase/
 │   ├── 001_schema.sql        Tabelas, chaves estrangeiras e permissões
 │   ├── 002_seed.sql           Dados da planilha original, prontos para importar
-│   └── 003_auth_policies.sql   Fecha o acesso: só usuário logado lê/grava
+│   ├── 003_auth_policies.sql   Fecha o acesso: só usuário logado lê/grava
+│   └── 004_cliente_cnpj_plano.sql   Troca telefone/e-mail por CNPJ/Plano
 └── README.md
 ```
 
@@ -63,6 +64,7 @@ gsia-inventario/
    - o conteúdo de `supabase/001_schema.sql`
    - o conteúdo de `supabase/002_seed.sql` (importa os dados da planilha original)
    - o conteúdo de `supabase/003_auth_policies.sql` (exige login para acessar os dados)
+   - o conteúdo de `supabase/004_cliente_cnpj_plano.sql` (troca telefone/e-mail por CNPJ/Plano)
 3. Vá em **Project Settings → Data API** e copie a **Project URL** e a
    chave **anon public**.
 4. Cole essas duas informações em `js/config.js`, nos campos `SUPABASE_URL`
